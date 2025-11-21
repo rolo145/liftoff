@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
-import PageHero from '@/components/layout/PageHero.vue';
-import SectionCard from '@/components/ui/SectionCard.vue';
-import StateMessage from '@/components/ui/StateMessage.vue';
-import { useTeamsStore } from '@/stores/teams';
-import { useScheduleStore } from '@/stores/schedule';
-import AdminBackLink from '@/components/admin/AdminBackLink.vue';
+import {
+  computed, onMounted, reactive, ref, watch,
+} from "vue";
+import PageHero from "@/components/layout/PageHero.vue";
+import SectionCard from "@/components/ui/SectionCard.vue";
+import StateMessage from "@/components/ui/StateMessage.vue";
+import { useTeamsStore } from "@/stores/teams";
+import { useScheduleStore } from "@/stores/schedule";
+import AdminBackLink from "@/components/admin/AdminBackLink.vue";
 
 interface ScheduleForm {
-  snatchTime: string;
-  cleanJerkTime: string;
-  wodTime: string;
+  snatchTime: string,
+  cleanJerkTime: string,
+  wodTime: string,
 }
 
 const teamsStore = useTeamsStore();
@@ -18,7 +20,7 @@ const scheduleStore = useScheduleStore();
 const forms = reactive<Record<string, ScheduleForm>>({});
 const saving = ref<string | null>(null);
 const toast = ref<string | null>(null);
-const searchQuery = ref('');
+const searchQuery = ref("");
 
 onMounted(() => {
   teamsStore.init();
@@ -26,9 +28,9 @@ onMounted(() => {
 });
 
 const defaultForm = (): ScheduleForm => ({
-  snatchTime: '',
-  cleanJerkTime: '',
-  wodTime: '',
+  snatchTime: "",
+  cleanJerkTime: "",
+  wodTime: "",
 });
 
 const syncForms = () => {
@@ -57,9 +59,9 @@ const saveSlot = async (teamId: string) => {
   toast.value = null;
   try {
     await scheduleStore.saveSlot({ teamId, ...payload });
-    toast.value = 'Schedule updated!';
+    toast.value = "Schedule updated!";
   } catch (error) {
-    toast.value = error instanceof Error ? error.message : 'Unable to save schedule.';
+    toast.value = error instanceof Error ? error.message : "Unable to save schedule.";
   } finally {
     saving.value = null;
   }
@@ -67,9 +69,9 @@ const saveSlot = async (teamId: string) => {
 
 const filteredTeams = computed(() => {
   const query = searchQuery.value.trim().toLowerCase();
-  if (!query) return teamsStore.teams;
+  if (!query) { return teamsStore.teams; }
   return teamsStore.teams.filter((team) => {
-    const haystack = `${team.name} ${team.athlete1} ${team.athlete2}`.toLowerCase();
+    const haystack = `${team.athlete1} ${team.athlete2}`.toLowerCase();
     return haystack.includes(query);
   });
 });
@@ -86,7 +88,9 @@ const filteredTeams = computed(() => {
       <AdminBackLink />
     </div>
     <SectionCard>
-      <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" v-if="!teamsStore.loading">
+      <div
+        v-if="!teamsStore.loading"
+        class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-sm text-white/70">
           Editing schedule for {{ filteredTeams.length }} teams
         </p>
@@ -98,7 +102,9 @@ const filteredTeams = computed(() => {
         />
       </div>
       <template v-if="teamsStore.loading || scheduleStore.loading">
-        <StateMessage title="Loading schedule..." icon="🎅" />
+        <StateMessage
+          title="Loading schedule..."
+          icon="🎅" />
       </template>
       <template v-else-if="teamsStore.error || scheduleStore.error">
         <StateMessage
@@ -122,7 +128,9 @@ const filteredTeams = computed(() => {
           icon="🔍"
         />
       </template>
-      <div v-else class="space-y-4">
+      <div
+        v-else
+        class="space-y-4">
         <article
           v-for="team in filteredTeams"
           :key="team.id"
@@ -133,9 +141,10 @@ const filteredTeams = computed(() => {
               <p class="text-xs uppercase text-white/60">
                 {{ team.category === 'men' ? 'Men + Men' : 'Women + Women' }}
               </p>
-              <p class="text-lg font-semibold">{{ team.name }}</p>
+              <p class="text-lg font-semibold">
+                {{ team.athlete1 }} • {{ team.athlete2 }}
+              </p>
             </div>
-            <p class="text-sm text-white/70">{{ team.athlete1 }} • {{ team.athlete2 }}</p>
           </header>
           <form
             v-if="forms[team.id]"

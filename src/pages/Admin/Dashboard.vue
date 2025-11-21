@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
-import PageHero from '@/components/layout/PageHero.vue';
-import SectionCard from '@/components/ui/SectionCard.vue';
-import StateMessage from '@/components/ui/StateMessage.vue';
-import { useAuthStore } from '@/stores/auth';
-import { useTeamsStore } from '@/stores/teams';
-import { useResultsStore } from '@/stores/results';
-import { useScheduleStore } from '@/stores/schedule';
-import { useWorkoutStore } from '@/stores/workout';
+import { computed, onMounted } from "vue";
+import { RouterLink } from "vue-router";
+import PageHero from "@/components/layout/PageHero.vue";
+import SectionCard from "@/components/ui/SectionCard.vue";
+import StateMessage from "@/components/ui/StateMessage.vue";
+import { useAuthStore } from "@/stores/auth";
+import { useTeamsStore } from "@/stores/teams";
+import { useResultsStore } from "@/stores/results";
+import { useScheduleStore } from "@/stores/schedule";
+import { useWorkoutStore } from "@/stores/workout";
 
 const authStore = useAuthStore();
 const teamsStore = useTeamsStore();
@@ -24,10 +24,10 @@ onMounted(() => {
 });
 
 const summary = computed(() => [
-  { label: 'Teams', value: teamsStore.teams.length, to: '/admin/dashboard/teams' },
-  { label: 'Results Logged', value: resultsStore.results.length, to: '/admin/dashboard/results' },
-  { label: 'Schedule Slots', value: scheduleStore.slots.length, to: '/admin/dashboard/schedule' },
-  { label: 'Workout Ready', value: workoutStore.workout ? 'Yes' : 'Draft', to: '/admin/dashboard/workout' },
+  { label: "Teams", value: teamsStore.teams.length, to: "/admin/dashboard/teams" },
+  { label: "Results Logged", value: resultsStore.results.length, to: "/admin/dashboard/results" },
+  { label: "Schedule Slots", value: scheduleStore.slots.length, to: "/admin/dashboard/schedule" },
+  { label: "Workout Ready", value: workoutStore.workout ? "Yes" : "Draft", to: "/admin/dashboard/workout" },
 ]);
 </script>
 
@@ -54,19 +54,27 @@ const summary = computed(() => [
           :to="item.to"
           class="rounded-3xl border border-white/10 bg-white/5 p-4 text-center transition hover:bg-white/10"
         >
-          <p class="text-xs uppercase tracking-[0.3em] text-white/60">{{ item.label }}</p>
-          <p class="text-3xl font-bold">{{ item.value }}</p>
+          <p class="text-xs uppercase tracking-[0.3em] text-white/60">
+            {{ item.label }}
+          </p>
+          <p class="text-3xl font-bold">
+            {{ item.value }}
+          </p>
         </RouterLink>
       </div>
     </SectionCard>
     <SectionCard>
-      <h2 class="font-display text-2xl mb-4">Quick Actions</h2>
+      <h2 class="font-display text-2xl mb-4">
+        Quick Actions
+      </h2>
       <div class="grid gap-4 md:grid-cols-2">
         <RouterLink
           to="/admin/dashboard/teams"
           class="rounded-3xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
         >
-          <h3 class="text-xl font-semibold">Manage Teams</h3>
+          <h3 class="text-xl font-semibold">
+            Manage Teams
+          </h3>
           <p class="text-sm text-white/70">
             Add, update, or remove teams, athletes, and categories.
           </p>
@@ -75,7 +83,9 @@ const summary = computed(() => [
           to="/admin/dashboard/results"
           class="rounded-3xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
         >
-          <h3 class="text-xl font-semibold">Record Results</h3>
+          <h3 class="text-xl font-semibold">
+            Record Results
+          </h3>
           <p class="text-sm text-white/70">
             Enter individual snatch & clean numbers plus WOD times.
           </p>
@@ -84,14 +94,20 @@ const summary = computed(() => [
           to="/admin/dashboard/workout"
           class="rounded-3xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
         >
-          <h3 class="text-xl font-semibold">Edit Workout</h3>
-          <p class="text-sm text-white/70">Publish description, standards, and time cap.</p>
+          <h3 class="text-xl font-semibold">
+            Edit Workout
+          </h3>
+          <p class="text-sm text-white/70">
+            Publish description, standards, and time cap.
+          </p>
         </RouterLink>
         <RouterLink
           to="/admin/dashboard/schedule"
           class="rounded-3xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
         >
-          <h3 class="text-xl font-semibold">Set Schedule</h3>
+          <h3 class="text-xl font-semibold">
+            Set Schedule
+          </h3>
           <p class="text-sm text-white/70">
             Assign lift attempts and WOD times for every team.
           </p>

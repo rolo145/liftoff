@@ -1,18 +1,20 @@
-import type { Category, LeaderboardEntry, Result, Team } from '@/types';
+import type {
+  Category, LeaderboardEntry, Result, Team,
+} from "@/types";
 
 export const CATEGORY_LABELS: Record<string, string> = {
-  men: 'Men + Men',
-  women: 'Women + Women',
+  men: "Men + Men",
+  women: "Women + Women",
 };
 
 export const parseWodTimeToSeconds = (input?: string | null): number | null => {
-  if (!input) return null;
+  if (!input) { return null; }
   const parts = input
-    .split(':')
+    .split(":")
     .map((part) => Number.parseFloat(part.trim()))
     .filter((value) => !Number.isNaN(value));
 
-  if (!parts.length) return null;
+  if (!parts.length) { return null; }
 
   if (parts.length === 3) {
     const [hours = 0, minutes = 0, seconds = 0] = parts;
@@ -28,23 +30,23 @@ export const parseWodTimeToSeconds = (input?: string | null): number | null => {
 };
 
 export const formatSecondsToTime = (value?: number | null): string | null => {
-  if (value === undefined || value === null || Number.isNaN(value)) return null;
+  if (value === undefined || value === null || Number.isNaN(value)) { return null; }
   const minutes = Math.floor(value / 60);
   const seconds = Math.round(value % 60)
     .toString()
-    .padStart(2, '0');
+    .padStart(2, "0");
   return `${minutes}:${seconds}`;
 };
 
 const applyEventRanking = (
   entries: LeaderboardEntry[],
   accessor: (entry: LeaderboardEntry) => number,
-  direction: 'asc' | 'desc',
+  direction: "asc" | "desc",
 ) => {
   const scored = [...entries].sort((a, b) => {
     const valueA = accessor(a);
     const valueB = accessor(b);
-    return direction === 'desc' ? valueB - valueA : valueA - valueB;
+    return direction === "desc" ? valueB - valueA : valueA - valueB;
   });
   scored.forEach((entry, index) => {
     entry.totalPoints += index + 1;
@@ -72,7 +74,7 @@ export const computeLeaderboardByCategory = (
 
     const entry: LeaderboardEntry = {
       teamId: team.id,
-      teamName: team.name,
+      teamName: `${team.athlete1} & ${team.athlete2}`,
       category: team.category,
       categoryLabel: CATEGORY_LABELS[team.category] ?? team.category,
       athletes: [team.athlete1, team.athlete2],
@@ -92,14 +94,14 @@ export const computeLeaderboardByCategory = (
 
   (Object.keys(grouped) as Category[]).forEach((category) => {
     const entries = grouped[category];
-    if (!entries.length) return;
+    if (!entries.length) { return; }
 
-    applyEventRanking(entries, (entry) => entry.snatchTotal, 'desc');
-    applyEventRanking(entries, (entry) => entry.cleanTotal, 'desc');
+    applyEventRanking(entries, (entry) => entry.snatchTotal, "desc");
+    applyEventRanking(entries, (entry) => entry.cleanTotal, "desc");
     applyEventRanking(
       entries,
       (entry) => (entry.wodSeconds ?? Number.POSITIVE_INFINITY),
-      'asc',
+      "asc",
     );
 
     entries
@@ -113,8 +115,8 @@ export const computeLeaderboardByCategory = (
         if (a.cleanTotal !== b.cleanTotal) {
           return b.cleanTotal - a.cleanTotal;
         }
-        if (a.wodSeconds === null) return 1;
-        if (b.wodSeconds === null) return -1;
+        if (a.wodSeconds === null) { return 1; }
+        if (b.wodSeconds === null) { return -1; }
         return a.wodSeconds - b.wodSeconds;
       })
       .forEach((entry, index) => {

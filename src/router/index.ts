@@ -3,58 +3,58 @@ import {
   createWebHistory,
   type RouteLocationNormalized,
   type RouteRecordRaw,
-} from 'vue-router';
-import type { Pinia } from 'pinia';
-import { useAuthStore } from '@/stores/auth';
+} from "vue-router";
+import type { Pinia } from "pinia";
+import { useAuthStore } from "@/stores/auth";
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/results' },
+  { path: "/", redirect: "/results" },
   {
-    path: '/results',
-    component: () => import('@/pages/Results/ResultsPage.vue'),
-    meta: { title: 'Leaderboard' },
+    path: "/results",
+    component: () => import("@/pages/Results/ResultsPage.vue"),
+    meta: { title: "Leaderboard" },
   },
   {
-    path: '/teams',
-    component: () => import('@/pages/Teams/TeamsPage.vue'),
-    meta: { title: 'Teams' },
+    path: "/teams",
+    component: () => import("@/pages/Teams/TeamsPage.vue"),
+    meta: { title: "Teams" },
   },
   {
-    path: '/schedule',
-    component: () => import('@/pages/Schedule/SchedulePage.vue'),
-    meta: { title: 'Schedule' },
+    path: "/schedule",
+    component: () => import("@/pages/Schedule/SchedulePage.vue"),
+    meta: { title: "Schedule" },
   },
   {
-    path: '/admin/login',
-    component: () => import('@/pages/Admin/Login.vue'),
-    meta: { title: 'Admin Login' },
+    path: "/admin/login",
+    component: () => import("@/pages/Admin/Login.vue"),
+    meta: { title: "Admin Login" },
   },
   {
-    path: '/admin/dashboard',
-    component: () => import('@/pages/Admin/Dashboard.vue'),
-    meta: { requiresAdmin: true, title: 'Admin Dashboard' },
+    path: "/admin/dashboard",
+    component: () => import("@/pages/Admin/Dashboard.vue"),
+    meta: { requiresAdmin: true, title: "Admin Dashboard" },
   },
   {
-    path: '/admin/dashboard/teams',
-    component: () => import('@/pages/Admin/TeamsEditor.vue'),
-    meta: { requiresAdmin: true, title: 'Teams Editor' },
+    path: "/admin/dashboard/teams",
+    component: () => import("@/pages/Admin/TeamsEditor.vue"),
+    meta: { requiresAdmin: true, title: "Teams Editor" },
   },
   {
-    path: '/admin/dashboard/workout',
-    component: () => import('@/pages/Admin/WorkoutEditor.vue'),
-    meta: { requiresAdmin: true, title: 'Workout Editor' },
+    path: "/admin/dashboard/workout",
+    component: () => import("@/pages/Admin/WorkoutEditor.vue"),
+    meta: { requiresAdmin: true, title: "Workout Editor" },
   },
   {
-    path: '/admin/dashboard/results',
-    component: () => import('@/pages/Admin/ResultsEditor.vue'),
-    meta: { requiresAdmin: true, title: 'Results Editor' },
+    path: "/admin/dashboard/results",
+    component: () => import("@/pages/Admin/ResultsEditor.vue"),
+    meta: { requiresAdmin: true, title: "Results Editor" },
   },
   {
-    path: '/admin/dashboard/schedule',
-    component: () => import('@/pages/Admin/ScheduleEditor.vue'),
-    meta: { requiresAdmin: true, title: 'Schedule Editor' },
+    path: "/admin/dashboard/schedule",
+    component: () => import("@/pages/Admin/ScheduleEditor.vue"),
+    meta: { requiresAdmin: true, title: "Schedule Editor" },
   },
-  { path: '/:pathMatch(.*)*', redirect: '/results' },
+  { path: "/:pathMatch(.*)*", redirect: "/results" },
 ];
 
 const router = createRouter({
@@ -73,7 +73,7 @@ export const registerGuards = (pinia: Pinia) => {
       await authStore.ensureAuthReady();
       if (!authStore.isAdmin) {
         return {
-          path: '/admin/login',
+          path: "/admin/login",
           query: { redirect: to.fullPath },
         };
       }
@@ -81,7 +81,7 @@ export const registerGuards = (pinia: Pinia) => {
     if (to.meta.title) {
       document.title = `LiftOff | ${to.meta.title as string}`;
     } else {
-      document.title = 'LiftOff';
+      document.title = "LiftOff";
     }
     return true;
   });

@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from "pinia";
+import { ref } from "vue";
 import {
   addDoc,
   collection,
@@ -12,23 +12,23 @@ import {
   updateDoc,
   where,
   getDocs,
-} from 'firebase/firestore';
-import type { ScheduleEntry, SchedulePayload } from '@/types';
-import { db } from '@/services/firebase';
+} from "firebase/firestore";
+import type { ScheduleEntry, SchedulePayload } from "@/types";
+import { db } from "@/services/firebase";
 
-const scheduleCollection = collection(db, 'schedule');
+const scheduleCollection = collection(db, "schedule");
 let unsubscribe: Unsubscribe | null = null;
 
-export const useScheduleStore = defineStore('schedule', () => {
+export const useScheduleStore = defineStore("schedule", () => {
   const slots = ref<ScheduleEntry[]>([]); // per-team event slots
   const loading = ref(false); // realtime watcher state
   const ready = ref(false); // indicates init already ran
   const error = ref<string | null>(null); // surfaced errors from Firestore
 
   const init = () => {
-    if (ready.value || unsubscribe) return;
+    if (ready.value || unsubscribe) { return; }
     loading.value = true;
-    const q = query(scheduleCollection, orderBy('snatchTime'));
+    const q = query(scheduleCollection, orderBy("snatchTime"));
     unsubscribe = onSnapshot(
       q,
       (snapshot) => {
@@ -51,11 +51,11 @@ export const useScheduleStore = defineStore('schedule', () => {
   };
 
   const saveSlot = async (payload: SchedulePayload) => {
-    const existing = await getDocs(query(scheduleCollection, where('teamId', '==', payload.teamId)));
+    const existing = await getDocs(query(scheduleCollection, where("teamId", "==", payload.teamId)));
     if (!existing.empty) {
       const docSnapshot = existing.docs[0];
       if (docSnapshot) {
-        const slotRef = doc(db, 'schedule', docSnapshot.id);
+        const slotRef = doc(db, "schedule", docSnapshot.id);
         await updateDoc(slotRef, payload);
         return;
       }
@@ -64,7 +64,7 @@ export const useScheduleStore = defineStore('schedule', () => {
   };
 
   const replaceSlot = async (id: string, payload: SchedulePayload) => {
-    const slotRef = doc(db, 'schedule', id);
+    const slotRef = doc(db, "schedule", id);
     await setDoc(slotRef, payload);
   };
 

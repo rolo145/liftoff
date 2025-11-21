@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { onMounted, reactive, watch, ref } from 'vue';
-import PageHero from '@/components/layout/PageHero.vue';
-import SectionCard from '@/components/ui/SectionCard.vue';
-import StateMessage from '@/components/ui/StateMessage.vue';
-import { useWorkoutStore } from '@/stores/workout';
-import AdminBackLink from '@/components/admin/AdminBackLink.vue';
+import {
+  onMounted, reactive, watch, ref,
+} from "vue";
+import PageHero from "@/components/layout/PageHero.vue";
+import SectionCard from "@/components/ui/SectionCard.vue";
+import StateMessage from "@/components/ui/StateMessage.vue";
+import { useWorkoutStore } from "@/stores/workout";
+import AdminBackLink from "@/components/admin/AdminBackLink.vue";
 
 const workoutStore = useWorkoutStore();
 const form = reactive({
-  description: '',
-  standards: '',
-  timeCap: '',
+  description: "",
+  standards: "",
+  timeCap: "",
 });
 const saving = ref(false);
 const feedback = ref<string | null>(null);
@@ -22,7 +24,7 @@ onMounted(() => {
 watch(
   () => workoutStore.workout,
   (value) => {
-    if (!value) return;
+    if (!value) { return; }
     form.description = value.description;
     form.standards = value.standards;
     form.timeCap = value.timeCap;
@@ -39,10 +41,10 @@ const handleSubmit = async () => {
       standards: form.standards,
       timeCap: form.timeCap,
     });
-    feedback.value = 'Workout updated!';
+    feedback.value = "Workout updated!";
   } catch (error) {
-    feedback.value =
-      error instanceof Error ? error.message : 'Unable to save workout right now.';
+    feedback.value
+      = error instanceof Error ? error.message : "Unable to save workout right now.";
   } finally {
     saving.value = false;
   }
@@ -60,7 +62,9 @@ const handleSubmit = async () => {
       <AdminBackLink />
     </div>
     <SectionCard>
-      <form class="space-y-4" @submit.prevent="handleSubmit">
+      <form
+        class="space-y-4"
+        @submit.prevent="handleSubmit">
         <label class="block space-y-2">
           <span class="text-xs uppercase text-white/60">Description</span>
           <textarea

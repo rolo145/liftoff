@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ScheduleEntry, Team } from '@/types';
+import type { ScheduleEntry, Team } from "@/types";
 
 defineProps<{
-  team: Team;
-  slot?: ScheduleEntry;
+  team: Team,
+  scheduleSlot?: ScheduleEntry,
 }>();
 </script>
 
@@ -14,30 +14,34 @@ defineProps<{
         <p class="text-xs uppercase text-white/60">
           {{ team.category === 'men' ? 'Men + Men' : 'Women + Women' }}
         </p>
-        <h3 class="font-semibold text-lg">{{ team.name }}</h3>
-      </div>
-      <div class="text-right text-xs text-white/70">
-        <p>{{ team.athlete1 }}</p>
-        <p>{{ team.athlete2 }}</p>
+        <h3 class="font-semibold text-lg">
+          {{ team.athlete1 }} &amp; {{ team.athlete2 }}
+        </h3>
       </div>
     </header>
     <dl class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
       <div class="rounded-2xl bg-black/40 p-3 border border-white/5">
-        <dt class="text-xs uppercase text-white/60">Snatch</dt>
+        <dt class="text-xs uppercase text-white/60">
+          Snatch
+        </dt>
         <dd class="text-base font-semibold">
-          {{ slot?.snatchTime ?? 'TBD' }}
+          {{ scheduleSlot?.snatchTime ?? "TBD" }}
         </dd>
       </div>
       <div class="rounded-2xl bg-black/40 p-3 border border-white/5">
-        <dt class="text-xs uppercase text-white/60">Clean &amp; Jerk</dt>
+        <dt class="text-xs uppercase text-white/60">
+          Clean &amp; Jerk
+        </dt>
         <dd class="text-base font-semibold">
-          {{ slot?.cleanJerkTime ?? 'TBD' }}
+          {{ scheduleSlot?.cleanJerkTime ?? "TBD" }}
         </dd>
       </div>
       <div class="rounded-2xl bg-black/40 p-3 border border-white/5">
-        <dt class="text-xs uppercase text-white/60">WOD</dt>
+        <dt class="text-xs uppercase text-white/60">
+          WOD
+        </dt>
         <dd class="text-base font-semibold">
-          {{ slot?.wodTime ?? 'TBD' }}
+          {{ scheduleSlot?.wodTime ?? "TBD" }}
         </dd>
       </div>
     </dl>

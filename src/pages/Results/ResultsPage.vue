@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import PageHero from '@/components/layout/PageHero.vue';
-import SectionCard from '@/components/ui/SectionCard.vue';
-import StateMessage from '@/components/ui/StateMessage.vue';
-import LeaderboardTable from '@/components/results/LeaderboardTable.vue';
-import { useTeamsStore } from '@/stores/teams';
-import { useResultsStore } from '@/stores/results';
-import { useWorkoutStore } from '@/stores/workout';
-import { computeLeaderboardByCategory } from '@/utils/scoring';
-import type { Category } from '@/types';
+import { computed, onMounted, ref } from "vue";
+import PageHero from "@/components/layout/PageHero.vue";
+import SectionCard from "@/components/ui/SectionCard.vue";
+import StateMessage from "@/components/ui/StateMessage.vue";
+import LeaderboardTable from "@/components/results/LeaderboardTable.vue";
+import { useTeamsStore } from "@/stores/teams";
+import { useResultsStore } from "@/stores/results";
+import { useWorkoutStore } from "@/stores/workout";
+import { computeLeaderboardByCategory } from "@/utils/scoring";
+import type { Category } from "@/types";
 
 const teamsStore = useTeamsStore();
 const resultsStore = useResultsStore();
@@ -25,40 +25,40 @@ const leaderboardByCategory = computed(() =>
 );
 const leaderboardLoading = computed(() => teamsStore.loading || resultsStore.loading);
 const categories = [
-  { key: 'men' as Category, label: 'Men + Men', icon: '💪' },
-  { key: 'women' as Category, label: 'Women + Women', icon: '🎀' },
+  { key: "men" as Category, label: "Men + Men", icon: "💪" },
+  { key: "women" as Category, label: "Women + Women", icon: "🎀" },
 ];
 
-type EventFilter = 'overall' | 'snatch' | 'clean' | 'wod';
-const eventFilter = ref<EventFilter>('overall');
+type EventFilter = "overall" | "snatch" | "clean" | "wod";
+const eventFilter = ref<EventFilter>("overall");
 const eventFilters = [
-  { key: 'overall' as EventFilter, label: 'Overall' },
-  { key: 'snatch' as EventFilter, label: 'Snatch' },
-  { key: 'clean' as EventFilter, label: 'Clean & Jerk' },
-  { key: 'wod' as EventFilter, label: 'WOD' },
+  { key: "overall" as EventFilter, label: "Overall" },
+  { key: "snatch" as EventFilter, label: "Snatch" },
+  { key: "clean" as EventFilter, label: "Clean & Jerk" },
+  { key: "wod" as EventFilter, label: "WOD" },
 ];
 const filterDescriptions: Record<EventFilter, string> = {
-  overall: 'Combined placing across all events.',
-  snatch: 'Sorted by combined snatch total (highest first).',
-  clean: 'Sorted by combined clean & jerk total.',
-  wod: 'Sorted by fastest workout time.',
+  overall: "Combined placing across all events.",
+  snatch: "Sorted by combined snatch total.",
+  clean: "Sorted by combined clean & jerk total.",
+  wod: "Sorted by fastest workout time.",
 };
 const currentFilterDescription = computed(
-  () => filterDescriptions[eventFilter.value] ?? 'Division standings.',
+  () => filterDescriptions[eventFilter.value] ?? "Division standings.",
 );
 
 const getEntries = (category: Category) => {
   // apply sorting for the selected leaderboard filter without mutating original list
   const base = [...(leaderboardByCategory.value[category] ?? [])];
   switch (eventFilter.value) {
-    case 'snatch':
+    case "snatch":
       return base.sort((a, b) => b.snatchTotal - a.snatchTotal);
-    case 'clean':
+    case "clean":
       return base.sort((a, b) => b.cleanTotal - a.cleanTotal);
-    case 'wod':
+    case "wod":
       return base.sort((a, b) => {
-        if (a.wodSeconds === null) return 1;
-        if (b.wodSeconds === null) return -1;
+        if (a.wodSeconds === null) { return 1; }
+        if (b.wodSeconds === null) { return -1; }
         return a.wodSeconds - b.wodSeconds;
       });
     default:
@@ -77,9 +77,13 @@ const getEntries = (category: Category) => {
 
     <SectionCard>
       <div class="space-y-4">
-        <p class="text-sm uppercase tracking-[0.3em] text-white/60">This year’s WOD</p>
+        <p class="text-sm uppercase tracking-[0.3em] text-white/60">
+          This year’s WOD
+        </p>
         <template v-if="workoutStore.loading">
-          <StateMessage title="Loading workout..." icon="🏋️" />
+          <StateMessage
+            title="Loading workout..."
+            icon="🏋️" />
         </template>
         <template v-else-if="workoutStore.error">
           <StateMessage
@@ -96,19 +100,27 @@ const getEntries = (category: Category) => {
             icon="❄️"
           />
         </template>
-        <div v-else class="grid gap-4 md:grid-cols-3">
+        <div
+          v-else
+          class="grid gap-4 md:grid-cols-3">
           <div class="md:col-span-2 space-y-2">
-            <h2 class="font-display text-2xl">Description</h2>
+            <h2 class="font-display text-2xl">
+              Description
+            </h2>
             <p class="text-sm text-white/80 whitespace-pre-line">
               {{ workoutStore.workout.description }}
             </p>
           </div>
           <div class="rounded-2xl bg-white/10 p-4">
-            <p class="text-xs uppercase tracking-[0.3em] text-white/70">Standards</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-white/70">
+              Standards
+            </p>
             <p class="text-sm text-white/80 whitespace-pre-line mb-4">
               {{ workoutStore.workout.standards }}
             </p>
-            <p class="text-xs uppercase tracking-[0.2em] text-white/70">Time Cap</p>
+            <p class="text-xs uppercase tracking-[0.2em] text-white/70">
+              Time Cap
+            </p>
             <p class="text-2xl font-semibold text-festive-gold">
               {{ workoutStore.workout.timeCap }}
             </p>
@@ -157,7 +169,9 @@ const getEntries = (category: Category) => {
           </span>
         </div>
         <template v-if="leaderboardLoading">
-          <StateMessage title="Crunching the latest lifts..." icon="🎅" />
+          <StateMessage
+            title="Crunching the latest lifts..."
+            icon="🎅" />
         </template>
         <template v-else-if="resultsStore.error || teamsStore.error">
           <StateMessage
@@ -181,7 +195,9 @@ const getEntries = (category: Category) => {
             icon="⏱️"
           />
         </template>
-        <div v-else class="overflow-x-auto">
+        <div
+          v-else
+          class="overflow-x-auto">
           <LeaderboardTable :entries="getEntries(category.key)" />
         </div>
       </SectionCard>

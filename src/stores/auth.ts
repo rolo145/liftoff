@@ -1,18 +1,18 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
 import {
   onAuthStateChanged,
   signInWithPopup,
   signOut,
   type Unsubscribe,
   type User,
-} from 'firebase/auth';
-import { ADMIN_UIDS, auth, googleProvider } from '@/services/firebase';
+} from "firebase/auth";
+import { ADMIN_UIDS, auth, googleProvider } from "@/services/firebase";
 
 let unsubscribeAuth: Unsubscribe | null = null;
 let initPromise: Promise<void> | null = null;
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null); // Firebase Auth user record
   const loading = ref(false); // login / subscription state
   const ready = ref(false); // ensures single onAuthStateChanged listener
@@ -64,7 +64,7 @@ export const useAuthStore = defineStore('auth', () => {
       error.value = null;
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Unable to sign in.';
+      error.value = err instanceof Error ? err.message : "Unable to sign in.";
     } finally {
       loading.value = false;
     }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const flakes = Array.from({ length: 38 }, (_, index) => {
-  const size = 4 + ((index * 7) % 8);
+const flakes = Array.from({ length: 120 }, (_, index) => {
+  const size = 3 + Math.floor(Math.random() * 10);
   return {
     id: index,
-    left: `${(index * 13) % 100}%`,
-    delay: `${(index % 12) * 0.35}s`,
-    duration: `${10 + (index % 6)}s`,
+    left: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 4}s`,
+    duration: `${9 + Math.random() * 10}s`,
     size: `${size}px`,
   };
 });

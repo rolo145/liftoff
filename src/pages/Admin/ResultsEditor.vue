@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
-import PageHero from '@/components/layout/PageHero.vue';
-import SectionCard from '@/components/ui/SectionCard.vue';
-import StateMessage from '@/components/ui/StateMessage.vue';
-import { useTeamsStore } from '@/stores/teams';
-import { useResultsStore } from '@/stores/results';
-import type { ResultPayload } from '@/types';
-import AdminBackLink from '@/components/admin/AdminBackLink.vue';
+import {
+  computed, onMounted, reactive, ref, watch,
+} from "vue";
+import PageHero from "@/components/layout/PageHero.vue";
+import SectionCard from "@/components/ui/SectionCard.vue";
+import StateMessage from "@/components/ui/StateMessage.vue";
+import { useTeamsStore } from "@/stores/teams";
+import { useResultsStore } from "@/stores/results";
+import type { ResultPayload } from "@/types";
+import AdminBackLink from "@/components/admin/AdminBackLink.vue";
 
 interface ResultForm {
-  snatchAthlete1: number;
-  snatchAthlete2: number;
-  cleanAthlete1: number;
-  cleanAthlete2: number;
-  wodTime: string;
+  snatchAthlete1: number,
+  snatchAthlete2: number,
+  cleanAthlete1: number,
+  cleanAthlete2: number,
+  wodTime: string,
 }
 
-type Section = 'snatch' | 'clean' | 'wod';
+type Section = "snatch" | "clean" | "wod";
 
 const teamsStore = useTeamsStore();
 const resultsStore = useResultsStore();
 const forms = reactive<Record<string, ResultForm>>({});
 const toast = ref<string | null>(null);
 const savingState = reactive<Record<string, Record<Section, boolean>>>({});
-const searchQuery = ref('');
+const searchQuery = ref("");
 
 onMounted(() => {
   teamsStore.init();
@@ -35,7 +37,7 @@ const buildForm = (): ResultForm => ({
   snatchAthlete2: 0,
   cleanAthlete1: 0,
   cleanAthlete2: 0,
-  wodTime: '00:00',
+  wodTime: "00:00",
 });
 
 const ensureSavingState = (teamId: string) => {
@@ -55,9 +57,9 @@ const syncForms = () => {
     const existing = resultsStore.results.find((result) => result.teamId === team.id);
     forms[team.id] = existing
       ? {
-              snatchAthlete1: existing.snatchAthlete1,
-              snatchAthlete2: existing.snatchAthlete2,
-              cleanAthlete1: existing.cleanAthlete1,
+          snatchAthlete1: existing.snatchAthlete1,
+          snatchAthlete2: existing.snatchAthlete2,
+          cleanAthlete1: existing.cleanAthlete1,
           cleanAthlete2: existing.cleanAthlete2,
           wodTime: existing.wodTime,
         }
@@ -76,12 +78,18 @@ watch(
 
 const filteredTeams = computed(() => {
   const query = searchQuery.value.trim().toLowerCase();
-  if (!query) return teamsStore.teams;
+  if (!query) { return teamsStore.teams; }
   return teamsStore.teams.filter((team) => {
-    const haystack = `${team.name} ${team.athlete1} ${team.athlete2}`.toLowerCase();
+    const haystack = `${team.athlete1} ${team.athlete2}`.toLowerCase();
     return haystack.includes(query);
   });
 });
+
+const sectionMessages: Record<Section, string> = {
+  snatch: "Snatch saved!",
+  clean: "Clean & Jerk saved!",
+  wod: "WOD saved!",
+};
 
 const saveSection = async (teamId: string, section: Section) => {
   const payload = forms[teamId] ?? buildForm();
@@ -90,10 +98,10 @@ const saveSection = async (teamId: string, section: Section) => {
   toast.value = null;
 
   const partial: Partial<ResultPayload> = {};
-  if (section === 'snatch') {
+  if (section === "snatch") {
     partial.snatchAthlete1 = payload.snatchAthlete1;
     partial.snatchAthlete2 = payload.snatchAthlete2;
-  } else if (section === 'clean') {
+  } else if (section === "clean") {
     partial.cleanAthlete1 = payload.cleanAthlete1;
     partial.cleanAthlete2 = payload.cleanAthlete2;
   } else {
@@ -102,14 +110,9 @@ const saveSection = async (teamId: string, section: Section) => {
 
   try {
     await resultsStore.savePartial(teamId, partial);
-    toast.value =
-      section === 'snatch'
-        ? 'Snatch saved!'
-        : section === 'clean'
-          ? 'Clean & Jerk saved!'
-          : 'WOD saved!';
+    toast.value = sectionMessages[section];
   } catch (error) {
-    toast.value = error instanceof Error ? error.message : 'Unable to save result.';
+    toast.value = error instanceof Error ? error.message : "Unable to save result.";
   } finally {
     sectionState[section] = false;
   }
@@ -140,7 +143,9 @@ const saveSection = async (teamId: string, section: Section) => {
           />
         </div>
         <template v-if="teamsStore.loading || resultsStore.loading">
-          <StateMessage title="Loading data..." icon="💾" />
+          <StateMessage
+            title="Loading data..."
+            icon="💾" />
         </template>
         <template v-else-if="teamsStore.error || resultsStore.error">
           <StateMessage
@@ -164,26 +169,35 @@ const saveSection = async (teamId: string, section: Section) => {
             icon="🔍"
           />
         </template>
-        <div v-else class="space-y-5">
+        <div
+          v-else
+          class="space-y-5">
           <article
             v-for="team in filteredTeams"
             :key="team.id"
             class="rounded-3xl border border-white/10 bg-white/5 p-4"
           >
-            <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <header class="mb-4 flex flex-wrap items-center gap-3 justify-between">
               <div>
                 <p class="text-xs uppercase text-white/60">
                   {{ team.category === 'men' ? 'Men + Men' : 'Women + Women' }}
                 </p>
-                <p class="text-lg font-semibold">{{ team.name }}</p>
+                <p class="text-lg font-semibold">
+                  {{ team.athlete1 }} • {{ team.athlete2 }}
+                </p>
               </div>
-              <p class="text-sm text-white/70">{{ team.athlete1 }} • {{ team.athlete2 }}</p>
             </header>
-            <div v-if="forms[team.id]" class="grid gap-4 md:grid-cols-3">
+            <div
+              v-if="forms[team.id]"
+              class="grid gap-4 md:grid-cols-3">
               <section class="rounded-2xl bg-black/30 p-4 space-y-3 border border-white/10">
                 <div>
-                  <p class="text-xs uppercase text-white/60 tracking-[0.2em]">Snatch</p>
-                  <p class="text-sm text-white/70">Max lift per athlete (kg)</p>
+                  <p class="text-xs uppercase text-white/60 tracking-[0.2em]">
+                    Snatch
+                  </p>
+                  <p class="text-sm text-white/70">
+                    Max lift per athlete (kg)
+                  </p>
                 </div>
                 <label class="space-y-1 block">
                   <span class="text-xs uppercase text-white/50">
@@ -220,8 +234,12 @@ const saveSection = async (teamId: string, section: Section) => {
               </section>
               <section class="rounded-2xl bg-black/30 p-4 space-y-3 border border-white/10">
                 <div>
-                  <p class="text-xs uppercase text-white/60 tracking-[0.2em]">Clean &amp; Jerk</p>
-                  <p class="text-sm text-white/70">Max lift per athlete (kg)</p>
+                  <p class="text-xs uppercase text-white/60 tracking-[0.2em]">
+                    Clean &amp; Jerk
+                  </p>
+                  <p class="text-sm text-white/70">
+                    Max lift per athlete (kg)
+                  </p>
                 </div>
                 <label class="space-y-1 block">
                   <span class="text-xs uppercase text-white/50">
@@ -258,8 +276,12 @@ const saveSection = async (teamId: string, section: Section) => {
               </section>
               <section class="rounded-2xl bg-black/30 p-4 space-y-3 border border-white/10">
                 <div>
-                  <p class="text-xs uppercase text-white/60 tracking-[0.2em]">WOD</p>
-                  <p class="text-sm text-white/70">Insert final time (mm:ss)</p>
+                  <p class="text-xs uppercase text-white/60 tracking-[0.2em]">
+                    WOD
+                  </p>
+                  <p class="text-sm text-white/70">
+                    Insert final time (mm:ss)
+                  </p>
                 </div>
                 <label class="space-y-1 block">
                   <span class="text-xs uppercase text-white/50">Time</span>

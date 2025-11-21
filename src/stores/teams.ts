@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from "pinia";
+import { ref } from "vue";
 import {
   addDoc,
   collection,
@@ -11,23 +11,23 @@ import {
   setDoc,
   type Unsubscribe,
   updateDoc,
-} from 'firebase/firestore';
-import type { Team, TeamPayload } from '@/types';
-import { db } from '@/services/firebase';
+} from "firebase/firestore";
+import type { Team, TeamPayload } from "@/types";
+import { db } from "@/services/firebase";
 
-const teamsCollection = collection(db, 'teams');
+const teamsCollection = collection(db, "teams");
 let unsubscribe: Unsubscribe | null = null;
 
-export const useTeamsStore = defineStore('teams', () => {
+export const useTeamsStore = defineStore("teams", () => {
   const teams = ref<Team[]>([]); // current realtime roster
   const loading = ref(false); // subscription spinner
   const error = ref<string | null>(null); // surface Firestore issues
   const ready = ref(false); // avoid duplicate subscriptions
 
   const init = () => {
-    if (ready.value || unsubscribe) return;
+    if (ready.value || unsubscribe) { return; }
     loading.value = true;
-    const q = query(teamsCollection, orderBy('name'));
+    const q = query(teamsCollection, orderBy("athlete1"));
     unsubscribe = onSnapshot(
       q,
       (snapshot) => {
@@ -54,17 +54,17 @@ export const useTeamsStore = defineStore('teams', () => {
   };
 
   const updateTeam = async (id: string, payload: Partial<TeamPayload>) => {
-    const teamRef = doc(db, 'teams', id);
+    const teamRef = doc(db, "teams", id);
     await updateDoc(teamRef, payload);
   };
 
   const replaceTeam = async (id: string, payload: TeamPayload) => {
-    const teamRef = doc(db, 'teams', id);
+    const teamRef = doc(db, "teams", id);
     await setDoc(teamRef, payload);
   };
 
   const deleteTeam = async (id: string) => {
-    const teamRef = doc(db, 'teams', id);
+    const teamRef = doc(db, "teams", id);
     await deleteDoc(teamRef);
   };
 

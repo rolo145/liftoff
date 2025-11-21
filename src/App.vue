@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { RouterView, useRouter } from 'vue-router';
-import MainNav from '@/components/layout/MainNav.vue';
-import Snowfall from '@/components/decor/Snowfall.vue';
-import { useAuthStore } from '@/stores/auth';
+import { computed, onMounted } from "vue";
+import { RouterView, useRouter } from "vue-router";
+import MainNav from "@/components/layout/MainNav.vue";
+import Snowfall from "@/components/decor/Snowfall.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -13,9 +13,9 @@ onMounted(() => {
   authStore.init();
 });
 
-const adminCtaText = computed(() => (authStore.isAdmin ? 'Dashboard' : 'Admin'));
+const adminCtaText = computed(() => (authStore.isAdmin ? "Dashboard" : "Admin"));
 const adminCtaDestination = computed(() =>
-  authStore.isAdmin ? '/admin/dashboard' : '/admin/login',
+  authStore.isAdmin ? "/admin/dashboard" : "/admin/login",
 );
 
 const goToAdmin = () => {
@@ -36,7 +36,9 @@ const goToAdmin = () => {
       <main class="flex-1 px-3 pb-16 pt-6 sm:px-6 lg:px-10">
         <div class="mx-auto flex w-full max-w-6xl flex-col gap-6">
           <RouterView v-slot="{ Component }">
-            <Transition name="page" mode="out-in">
+            <Transition
+              name="page"
+              mode="out-in">
               <component :is="Component" />
             </Transition>
           </RouterView>
@@ -46,7 +48,9 @@ const goToAdmin = () => {
         class="bg-[#140005]/80 py-8 text-center text-sm text-white/70 backdrop-blur flex flex-col items-center gap-3"
       >
         <div>
-          <p class="font-display text-xl text-festive-gold drop-shadow">LiftOff</p>
+          <p class="font-display text-xl text-festive-gold drop-shadow">
+            LiftOff
+          </p>
           <p>Festive CrossFit Throwdown • Snow, Steel, and Smiles</p>
         </div>
         <button

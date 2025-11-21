@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 
 const navLinks = [
-  { label: 'Results', to: '/results' },
-  { label: 'Teams', to: '/teams' },
-  { label: 'Schedule', to: '/schedule' },
+  { label: "Results", to: "/results" },
+  { label: "Teams", to: "/teams" },
+  { label: "Schedule", to: "/schedule" },
 ];
 
 const isActive = (path: string) => route.path.startsWith(path);
@@ -24,7 +24,9 @@ const isActive = (path: string) => route.path.startsWith(path);
         <span class="text-2xl">🎄</span>
       </div>
       <div>
-        <p class="font-display text-3xl text-white drop-shadow">LiftOff</p>
+        <p class="font-display text-3xl text-white drop-shadow">
+          LiftOff
+        </p>
         <p class="text-xs uppercase tracking-[0.2em] text-festive-mint">
           CrossFit Winter Showdown
         </p>

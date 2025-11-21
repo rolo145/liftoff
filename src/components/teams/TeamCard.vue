@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Team } from '@/types';
+import type { Team } from "@/types";
 
 defineProps<{
-  team: Team;
+  team: Team,
 }>();
 </script>
 
@@ -14,11 +14,7 @@ defineProps<{
       <p class="text-xs uppercase tracking-[0.2em] text-white/60">
         {{ team.category === 'men' ? 'Men + Men' : 'Women + Women' }}
       </p>
-      <span class="rounded-full bg-white/10 px-3 py-1 text-xs">
-        #{{ team.id.slice(-4).toUpperCase() }}
-      </span>
     </div>
-    <h3 class="font-display text-2xl">{{ team.name }}</h3>
     <ul class="space-y-1 text-sm text-white/80">
       <li>👟 {{ team.athlete1 }}</li>
       <li>🏋️ {{ team.athlete2 }}</li>

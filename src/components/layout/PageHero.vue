@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineProps<{
-  title: string;
-  subtitle: string;
-  badge?: string;
+  title: string,
+  subtitle: string,
+  badge?: string,
 }>();
 </script>
 
@@ -12,8 +12,14 @@ defineProps<{
   >
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.2),_transparent_60%)]"></div>
     <div class="relative z-10 flex flex-col gap-1">
-      <p v-if="badge" class="text-xs uppercase tracking-[0.3em] text-white/70">{{ badge }}</p>
-      <h1 class="font-display text-3xl sm:text-4xl">{{ title }}</h1>
+      <p
+        v-if="badge"
+        class="text-xs uppercase tracking-[0.3em] text-white/70">
+        {{ badge }}
+      </p>
+      <h1 class="font-display text-3xl sm:text-4xl">
+        {{ title }}
+      </h1>
       <p class="text-sm sm:text-base text-white/80">
         {{ subtitle }}
       </p>
