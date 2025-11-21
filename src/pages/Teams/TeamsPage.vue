@@ -33,7 +33,7 @@ const womenTeams = computed(() =>
   <div class="space-y-6 text-white">
     <PageHero
       badge="Teams"
-      title="Meet the LiftOff Crews"
+      title="Meet the LiftOff Teams"
       subtitle="Duos ready to brave the snow, barbells, and twinkling lights."
     />
 
