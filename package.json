@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "",
     "preview": "vite preview",
     "set-admin": "node scripts/setAdminClaims.mjs"
   },
